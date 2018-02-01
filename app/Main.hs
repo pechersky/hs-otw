@@ -1,6 +1,8 @@
 module Main where
 
-import Lib
+import Natas
 
 main :: IO ()
-main = someFunc
+main = do
+  r <- accessLevel 0 "natas0"
+  print r
