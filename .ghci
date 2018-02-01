@@ -1,0 +1,7 @@
+:set +t
+:set +s
+:set prompt ">  "
+:def pf \str -> return $ ":! stack exec pointfree -- \"" ++ str ++ "\""
+:def pff \str -> return $ ":! stack exec pointful -- \"" ++ str ++ "\""
+:def hg \str -> return $ ":! stack exec hoogle -- \"" ++ str ++ "\""
+:def def \str -> return $ ":! stack exec hoogle -- --info \"" ++ str ++ "\""
