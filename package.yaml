@@ -36,6 +36,7 @@ library:
     - bytestring
     - wreq
     - lens
+    - tagsoup
 
 executables:
   hs-otw-exe:
