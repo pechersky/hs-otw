@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-10.4
+resolver: lts-8.24
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -40,12 +40,6 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
 extra-deps:
-  - https://hackage.haskell.org/package/ghc-mod-5.9.0.0/candidate/ghc-mod-5.9.0.0.tar.gz
-  - cabal-helper-0.8.0.0
-  - extra-1.5.3
-  - monad-journal-0.7.2
-  - optparse-applicative-0.13.2.0
-  - either-4.4.1.1
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
