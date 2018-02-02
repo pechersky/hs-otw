@@ -22,7 +22,7 @@ moduleToSoln :: Module -> Q (Maybe ExpQ)
 moduleToSoln (Module _ (ModName modname))
   | null moduleNumberStr = pure Nothing
   | otherwise = do
-    solnName <- lookupValueName (modname ++ ".solution" ++ moduleNumberStr)
+    solnName <- lookupValueName (modname ++ ".solution")
     case solnName of
       Nothing -> pure Nothing
       Just name ->
