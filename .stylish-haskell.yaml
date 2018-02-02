@@ -222,5 +222,7 @@ newline: native
 language_extensions:
   - OverloadedStrings
   - ViewPatterns
+  - TypeApplications
+  - LambdaCase
   # - TemplateHaskell
   # - QuasiQuotes
