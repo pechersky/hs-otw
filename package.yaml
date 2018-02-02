@@ -33,6 +33,8 @@ library:
     - LambdaCase
     - OverloadedStrings
   dependencies:
+    - template-haskell
+    - containers
     - text
     - bytestring
     - wreq

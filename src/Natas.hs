@@ -1,7 +1,37 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Natas
-  ( module Natas.Natas
-  , module Natas.Natas0
+  ( challenges
+  , runChallenge
   ) where
 
+import           Data.List                  (isInfixOf)
+import qualified Data.Map                   as M
+import           Data.Maybe                 (catMaybes)
+import           Data.Text                  (Text)
+import           Language.Haskell.TH.Lib
+import           Language.Haskell.TH.Syntax
+
 import           Natas.Natas
-import           Natas.Natas0
+import           Natas.Natas0               (solution)
+
+challenges :: M.Map Int (IO (Maybe Text))
+challenges =
+  M.fromList
+    $(do currmod <- thisModule
+         ModuleInfo xs <- reifyModule currmod
+         let natasModules =
+               filter
+                 (\(Module _ mname) -> isInfixOf "Natas" (modString mname))
+                 xs
+         solns <- traverse moduleToSoln natasModules
+         listE (catMaybes solns))
+
+runChallenge :: Maybe Int -> IO ()
+runChallenge =
+  \case
+    Nothing -> pure ()
+    Just n ->
+      case M.lookup n challenges of
+        Nothing  -> pure ()
+        Just act -> act >>= print

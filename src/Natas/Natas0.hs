@@ -11,8 +11,8 @@ import           Text.HTML.TagSoup
 
 import           Natas.Natas
 
-soln0 :: IO (Maybe T.Text)
-soln0 = workupRequest <$> accessLevel 0 "natas0"
+solution :: IO (Maybe T.Text)
+solution = workupRequest <$> accessLevel 0 "natas0"
 
 workupRequest :: Response ByteString -> Maybe T.Text
 workupRequest r = last . T.words <$> targetTag

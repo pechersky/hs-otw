@@ -1,8 +1,10 @@
 module Main where
 
+import           Text.Read (readMaybe)
+
 import           Natas
 
 main :: IO ()
 main = do
-  r <- accessLevel 0 "natas0"
-  print r
+  input <- getLine
+  runChallenge $ readMaybe input
