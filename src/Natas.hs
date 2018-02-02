@@ -8,14 +8,14 @@ module Natas
 import           Data.List                  (isInfixOf)
 import qualified Data.Map                   as M
 import           Data.Maybe                 (catMaybes)
-import           Data.Text                  (Text)
+
 import           Language.Haskell.TH.Lib
 import           Language.Haskell.TH.Syntax
 
 import           Natas.Natas
 import           Natas.Natas0               (solution)
 
-challenges :: M.Map Int (IO (Maybe Text))
+challenges :: M.Map Int Solution
 challenges =
   M.fromList
     $(do currmod <- thisModule
@@ -33,5 +33,8 @@ runChallenge =
     Nothing -> pure ()
     Just n ->
       case M.lookup n challenges of
-        Nothing  -> pure ()
-        Just act -> act >>= print
+        Nothing -> pure ()
+        Just act -> do
+          request <- accessLevel n ("natas" ++ show n)
+          print request
+          act request >>= print

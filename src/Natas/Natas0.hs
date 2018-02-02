@@ -11,10 +11,10 @@ import           Text.HTML.TagSoup
 
 import           Natas.Natas
 
-solution :: IO (Maybe T.Text)
-solution = workupRequest <$> accessLevel 0 "natas0"
+solution :: Solution
+solution = pure . workupRequest
 
-workupRequest :: Response ByteString -> Maybe T.Text
+workupRequest :: Response ByteString -> Answer
 workupRequest r = last . T.words <$> targetTag
   where
     comments =

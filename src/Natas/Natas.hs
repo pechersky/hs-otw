@@ -4,10 +4,15 @@ import           Control.Lens
 import           Data.ByteString.Lazy       (ByteString)
 import           Data.Char                  (isDigit)
 import           Data.String                (fromString)
+import           Data.Text                  (Text)
 import           Network.Wreq
 
 import           Language.Haskell.TH.Lib
 import           Language.Haskell.TH.Syntax
+
+type Answer = Maybe Text
+
+type Solution = Response ByteString -> IO Answer
 
 parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
