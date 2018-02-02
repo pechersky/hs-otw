@@ -1,8 +1,7 @@
 module Natas
   ( module Natas.Natas
   , module Natas.Natas0
-  )
-    where
+  ) where
 
-import Natas.Natas
-import Natas.Natas0
+import           Natas.Natas
+import           Natas.Natas0

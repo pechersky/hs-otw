@@ -1,6 +1,6 @@
 module Main where
 
-import Natas
+import           Natas
 
 main :: IO ()
 main = do
