@@ -6,7 +6,7 @@ module Natas
   ) where
 
 import           Control.Monad.Trans.Class  (lift)
-import           Control.Monad.Trans.Maybe  (MaybeT (..))
+import           Control.Monad.Trans.Maybe  (MaybeT (..), runMaybeT)
 import           Data.List                  (isInfixOf)
 import qualified Data.Map                   as M
 import           Data.Maybe                 (catMaybes)
@@ -30,9 +30,8 @@ challenges =
          solns <- traverse moduleToSoln natasModules
          listE (catMaybes solns))
 
-runChallenge :: Maybe Int -> MaybeT IO ()
-runChallenge Nothing = pure ()
-runChallenge (Just n) = do
+runChallenge :: Int -> IO (Maybe ())
+runChallenge n = runMaybeT $ do
   Just act <- pure $ M.lookup n challenges
   request <- lift $ accessLevel n
   newPassword <- MaybeT (act request)
