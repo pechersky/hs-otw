@@ -10,6 +10,7 @@ import           Network.Wreq
 import           Text.HTML.TagSoup
 
 import           Natas.Natas
+import           Natas.Parse
 
 solution :: Solution
 solution = pure . workupRequest
@@ -22,9 +23,3 @@ workupRequest r = last . T.words <$> targetTag
       catMaybes . fmap fromTagComment . parseTags $
       r ^. responseBody
     targetTag = listToMaybe . filter (("natas1" `elem`) . T.words) $ comments
-
-fromTagComment :: Tag a -> Maybe a
-fromTagComment =
-  \case
-    TagComment str -> Just str
-    _ -> Nothing
