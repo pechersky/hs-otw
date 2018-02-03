@@ -10,7 +10,7 @@ import           Network.Wreq
 import           Natas.Natas
 
 solution :: Solution
-solution _ = do
+solution = do
   req <- accessLevel' 3 (parentUri 3 ++ "/s3cr3t/users.txt") id
   let body = (decodeUtf8 . C.toStrict) $ req ^. responseBody
       match =

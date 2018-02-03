@@ -13,7 +13,7 @@ import           Text.HTML.TagSoup
 import           Natas.Natas
 
 solution :: Solution
-solution _ = do
+solution = do
   let referer = header hReferer .~ [fromString (parentUri 5 ++ "/")]
   req <- accessLevel' 4 (parentUri 4) referer
   let body = (decodeUtf8 . C.toStrict) $ req ^. responseBody

@@ -15,16 +15,18 @@ import           Language.Haskell.TH.Syntax
 
 type Answer = Maybe Text
 
-type Solution = Response ByteString -> IO Answer
+type CResponse = Response ByteString
+
+type Solution = IO Answer
 
 parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 
-accessLevel :: Int -> IO (Response ByteString)
+accessLevel :: Int -> IO CResponse
 accessLevel level = accessLevel' level (parentUri level) id
 
 accessLevel' ::
-     Int -> String -> (Options -> Options) -> IO (Response ByteString)
+     Int -> String -> (Options -> Options) -> IO CResponse
 accessLevel' level uri modifyOptions = do
   password <- E.encodeUtf8 <$> readPassword level
   let username = fromString ("natas" ++ show level)

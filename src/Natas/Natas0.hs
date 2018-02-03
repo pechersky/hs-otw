@@ -1,7 +1,6 @@
 module Natas.Natas0 where
 
 import           Control.Lens
-import           Data.ByteString.Lazy       (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as C
 import           Data.Maybe                 (catMaybes, listToMaybe)
 import qualified Data.Text                  as T
@@ -13,9 +12,11 @@ import           Natas.Natas
 import           Natas.Parse
 
 solution :: Solution
-solution = pure . workupRequest
+solution = do
+  req <- accessLevel 0
+  pure $ workupRequest req
 
-workupRequest :: Response ByteString -> Answer
+workupRequest :: CResponse -> Answer
 workupRequest r = last . T.words <$> targetTag
   where
     comments =

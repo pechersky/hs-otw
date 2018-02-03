@@ -37,7 +37,6 @@ runChallenge :: Int -> IO (Maybe ())
 runChallenge n =
   runMaybeT $ do
     Just act <- pure $ M.lookup n challenges
-    request <- lift $ accessLevel n
-    newPassword <- MaybeT (act request)
+    newPassword <- MaybeT act
     lift $ print newPassword
     lift $ writePassword (n + 1) newPassword
