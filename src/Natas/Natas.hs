@@ -25,13 +25,16 @@ parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 accessLevel :: Int -> IO CResponse
 accessLevel level = accessLevel' level (parentUri level) id
 
-accessLevel' ::
-     Int -> String -> (Options -> Options) -> IO CResponse
+accessLevel' :: Int -> String -> (Options -> Options) -> IO CResponse
 accessLevel' level uri modifyOptions = do
+  opts <- modifyOptions <$> loginOptions level
+  getWith opts uri
+
+loginOptions :: Int -> IO Options
+loginOptions level = do
   password <- E.encodeUtf8 <$> readPassword level
   let username = fromString ("natas" ++ show level)
-      opts = defaults & auth ?~ basicAuth username password & modifyOptions
-  getWith opts uri
+  pure $ defaults & auth ?~ basicAuth username password
 
 readPassword :: Int -> IO Text
 readPassword n = T.strip <$> TIO.readFile ("passwords/natas" ++ show n)
