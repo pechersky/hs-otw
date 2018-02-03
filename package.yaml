@@ -39,6 +39,7 @@ library:
     - bytestring
     - wreq
     - http-types
+    - http-client
     - lens
     - transformers
     - tagsoup

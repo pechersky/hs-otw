@@ -20,6 +20,7 @@ import           Natas.Natas1               (solution)
 import           Natas.Natas2               (solution)
 import           Natas.Natas3               (solution)
 import           Natas.Natas4               (solution)
+import           Natas.Natas5               (solution)
 
 challenges :: M.Map Int Solution
 challenges =
