@@ -38,6 +38,7 @@ library:
     - text
     - bytestring
     - wreq
+    - http-types
     - lens
     - transformers
     - tagsoup

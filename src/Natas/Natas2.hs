@@ -11,7 +11,7 @@ import           Natas.Natas
 
 solution :: Solution
 solution _ = do
-  req <- accessLevel' 2 (parentUri 2 ++ "/files/users.txt")
+  req <- accessLevel' 2 (parentUri 2 ++ "/files/users.txt") id
   let body = (decodeUtf8 . C.toStrict) $ req ^. responseBody
       match =
         (listToMaybe . filter ("natas3" `elem`) . fmap (T.splitOn ":") . T.lines)

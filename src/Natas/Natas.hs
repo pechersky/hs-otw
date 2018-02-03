@@ -6,8 +6,8 @@ import           Data.Char                  (isDigit)
 import           Data.String                (fromString)
 import           Data.Text                  (Text)
 import qualified Data.Text                  as T
-import qualified Data.Text.IO               as TIO
 import qualified Data.Text.Encoding         as E
+import qualified Data.Text.IO               as TIO
 import           Network.Wreq
 
 import           Language.Haskell.TH.Lib
@@ -21,13 +21,14 @@ parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 
 accessLevel :: Int -> IO (Response ByteString)
-accessLevel level = accessLevel' level (parentUri level)
+accessLevel level = accessLevel' level (parentUri level) id
 
-accessLevel' :: Int -> String -> IO (Response ByteString)
-accessLevel' level uri = do
+accessLevel' ::
+     Int -> String -> (Options -> Options) -> IO (Response ByteString)
+accessLevel' level uri modifyOptions = do
   password <- E.encodeUtf8 <$> readPassword level
   let username = fromString ("natas" ++ show level)
-      opts = defaults & auth ?~ basicAuth username password
+      opts = defaults & auth ?~ basicAuth username password & modifyOptions
   getWith opts uri
 
 readPassword :: Int -> IO Text
