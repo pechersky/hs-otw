@@ -17,6 +17,7 @@ import           Language.Haskell.TH.Syntax hiding (lift)
 import           Natas.Natas
 import           Natas.Natas0               (solution)
 import           Natas.Natas1               (solution)
+import           Natas.Natas2               (solution)
 
 challenges :: M.Map Int Solution
 challenges =
