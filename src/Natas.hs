@@ -35,6 +35,9 @@ runChallenge =
       case M.lookup n challenges of
         Nothing -> pure ()
         Just act -> do
-          request <- accessLevel n ("natas" ++ show n)
-          print request
-          act request >>= print
+          request <- accessLevel n
+          act request >>= \case
+            Nothing -> pure ()
+            Just newPassword -> do
+              print newPassword
+              writePassword (n+1) newPassword

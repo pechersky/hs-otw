@@ -5,6 +5,9 @@ import           Data.ByteString.Lazy       (ByteString)
 import           Data.Char                  (isDigit)
 import           Data.String                (fromString)
 import           Data.Text                  (Text)
+import qualified Data.Text                  as T
+import qualified Data.Text.IO               as TIO
+import qualified Data.Text.Encoding         as E
 import           Network.Wreq
 
 import           Language.Haskell.TH.Lib
@@ -17,11 +20,18 @@ type Solution = Response ByteString -> IO Answer
 parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 
-accessLevel :: Int -> String -> IO (Response ByteString)
-accessLevel level (fromString -> password) = getWith opts (parentUri level)
-  where
-    opts = defaults & auth ?~ basicAuth username password
-    username = fromString ("natas" ++ show level)
+accessLevel :: Int -> IO (Response ByteString)
+accessLevel level = do
+  password <- E.encodeUtf8 <$> readPassword level
+  let username = fromString ("natas" ++ show level)
+      opts = defaults & auth ?~ basicAuth username password
+  getWith opts (parentUri level)
+
+readPassword :: Int -> IO Text
+readPassword n = T.strip <$> TIO.readFile ("passwords/natas" ++ show n)
+
+writePassword :: Int -> Text -> IO ()
+writePassword n = TIO.writeFile ("passwords/natas" ++ show n) . T.strip
 
 moduleToSoln :: Module -> Q (Maybe ExpQ)
 moduleToSoln (Module _ (ModName modname))
