@@ -21,11 +21,14 @@ parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 
 accessLevel :: Int -> IO (Response ByteString)
-accessLevel level = do
+accessLevel level = accessLevel' level (parentUri level)
+
+accessLevel' :: Int -> String -> IO (Response ByteString)
+accessLevel' level uri = do
   password <- E.encodeUtf8 <$> readPassword level
   let username = fromString ("natas" ++ show level)
       opts = defaults & auth ?~ basicAuth username password
-  getWith opts (parentUri level)
+  getWith opts uri
 
 readPassword :: Int -> IO Text
 readPassword n = T.strip <$> TIO.readFile ("passwords/natas" ++ show n)
