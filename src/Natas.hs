@@ -5,15 +5,18 @@ module Natas
   , runChallenge
   ) where
 
+import           Control.Monad.Trans.Class  (lift)
+import           Control.Monad.Trans.Maybe  (MaybeT (..))
 import           Data.List                  (isInfixOf)
 import qualified Data.Map                   as M
 import           Data.Maybe                 (catMaybes)
 
 import           Language.Haskell.TH.Lib
-import           Language.Haskell.TH.Syntax
+import           Language.Haskell.TH.Syntax hiding (lift)
 
 import           Natas.Natas
 import           Natas.Natas0               (solution)
+import           Natas.Natas1               (solution)
 
 challenges :: M.Map Int Solution
 challenges =
@@ -27,17 +30,11 @@ challenges =
          solns <- traverse moduleToSoln natasModules
          listE (catMaybes solns))
 
-runChallenge :: Maybe Int -> IO ()
-runChallenge =
-  \case
-    Nothing -> pure ()
-    Just n ->
-      case M.lookup n challenges of
-        Nothing -> pure ()
-        Just act -> do
-          request <- accessLevel n
-          act request >>= \case
-            Nothing -> pure ()
-            Just newPassword -> do
-              print newPassword
-              writePassword (n+1) newPassword
+runChallenge :: Maybe Int -> MaybeT IO ()
+runChallenge Nothing = pure ()
+runChallenge (Just n) = do
+  Just act <- pure $ M.lookup n challenges
+  request <- lift $ accessLevel n
+  newPassword <- MaybeT (act request)
+  lift $ print newPassword
+  lift $ writePassword (n + 1) newPassword

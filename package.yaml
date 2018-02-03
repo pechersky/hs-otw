@@ -39,6 +39,7 @@ library:
     - bytestring
     - wreq
     - lens
+    - transformers
     - tagsoup
 
 executables:

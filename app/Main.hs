@@ -1,10 +1,12 @@
 module Main where
 
-import           Text.Read (readMaybe)
+import           Control.Monad.Trans.Maybe (runMaybeT)
+import           Text.Read                 (readMaybe)
 
 import           Natas
 
 main :: IO ()
 main = do
   input <- getLine
-  runChallenge $ readMaybe input
+  _ <- runMaybeT $ runChallenge (readMaybe input)
+  pure ()
