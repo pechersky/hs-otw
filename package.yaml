@@ -36,7 +36,9 @@ library:
     - template-haskell
     - containers
     - text
+    - base64-bytestring
     - bytestring
+    - hexstring
     - wreq
     - http-types
     - http-client
