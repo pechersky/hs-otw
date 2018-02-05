@@ -5,37 +5,25 @@ module Natas
   , runChallenge
   ) where
 
-import           Control.Monad.Trans.Class  (lift)
-import           Control.Monad.Trans.Maybe  (MaybeT (..), runMaybeT)
-import           Data.List                  (isInfixOf)
-import qualified Data.Map                   as M
-import           Data.Maybe                 (catMaybes)
-
-import           Language.Haskell.TH.Lib
-import           Language.Haskell.TH.Syntax hiding (lift)
+import           Control.Monad.Trans.Class (lift)
+import           Control.Monad.Trans.Maybe (MaybeT (..), runMaybeT)
+import qualified Data.Map                  as M
 
 import           Natas.Natas
-import           Natas.Natas0               (solution)
-import           Natas.Natas1               (solution)
-import           Natas.Natas2               (solution)
-import           Natas.Natas3               (solution)
-import           Natas.Natas4               (solution)
-import           Natas.Natas5               (solution)
-import           Natas.Natas6               (solution)
-import           Natas.Natas7               (solution)
-import           Natas.Natas8               (solution)
+import           Natas.TH
+
+import           Natas.Natas0              (solution)
+import           Natas.Natas1              (solution)
+import           Natas.Natas2              (solution)
+import           Natas.Natas3              (solution)
+import           Natas.Natas4              (solution)
+import           Natas.Natas5              (solution)
+import           Natas.Natas6              (solution)
+import           Natas.Natas7              (solution)
+import           Natas.Natas8              (solution)
 
 challenges :: M.Map Int Solution
-challenges =
-  M.fromList
-    $(do currmod <- thisModule
-         ModuleInfo xs <- reifyModule currmod
-         let natasModules =
-               filter
-                 (\(Module _ mname) -> isInfixOf "Natas" (modString mname))
-                 xs
-         solns <- traverse moduleToSoln natasModules
-         listE (catMaybes solns))
+challenges = M.fromList $(getChallenges)
 
 runChallenge :: Int -> IO (Maybe ())
 runChallenge n =
