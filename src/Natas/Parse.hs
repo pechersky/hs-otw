@@ -19,7 +19,7 @@ fromTagComment :: Tag a -> Maybe a
 fromTagComment =
   \case
     TagComment str -> Just str
-    _ -> Nothing
+    _tag -> Nothing
 
 workupComments' :: ([T.Text] -> Bool) -> CResponse -> Answer
 workupComments' predicate req = last . T.words <$> targetTag

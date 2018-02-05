@@ -9,5 +9,5 @@ main =
   fmap readMaybe getLine >>= \case
     Nothing -> pure ()
     Just level -> do
-      _ <- runChallenge level
+      _res <- runChallenge level
       pure ()

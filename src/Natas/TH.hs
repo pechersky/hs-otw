@@ -13,13 +13,13 @@ getChallenges = do
   ModuleInfo xs <- reifyModule currmod
   let natasModules =
         filter
-          (\(Module _ mname) -> isInfixOf "Natas" (modString mname))
+          (\(Module _pkgname mname) -> isInfixOf "Natas" (modString mname))
           xs
   solns <- traverse moduleToSoln natasModules
   listE (catMaybes solns)
 
 moduleToSoln :: Module -> Q (Maybe ExpQ)
-moduleToSoln (Module _ (ModName modname))
+moduleToSoln (Module _pkgname (ModName modname))
   | null moduleNumberStr = pure Nothing
   | otherwise = do
     solnName <- lookupValueName (modname ++ ".solution")
