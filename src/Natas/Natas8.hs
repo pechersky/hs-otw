@@ -1,53 +1,46 @@
 module Natas.Natas8 where
 
-import           Control.Lens
-import qualified Data.ByteString            as B
-import           Data.ByteString.Base64     (decode)
-import qualified Data.ByteString.Lazy.Char8 as C
-import           Data.Char                  (isAlphaNum)
-import           Data.HexString
-import           Data.Maybe                 (catMaybes, listToMaybe)
-import           Data.String                (fromString)
-import qualified Data.Text                  as T
-import           Data.Text.Encoding         (decodeUtf8)
-import           Network.Wreq
-import           Text.HTML.TagSoup
-import           Text.HTML.TagSoup.Entity   (lookupEntity)
+import qualified Data.ByteString          as B
+import           Data.ByteString.Base64   (decode)
+import           Data.ByteString.Lazy     (ByteString)
+import           Data.Char                (isAlphaNum)
+import           Data.HexString           (hexString, toBytes)
+import           Data.Maybe               (catMaybes)
+import           Data.String              (fromString)
+import qualified Data.Text                as T
+import           Network.Wreq             (FormParam ((:=)), postWith)
+import           Safe                     (headMay, lastMay)
+import           Text.HTML.TagSoup        (innerText, maybeTagText,
+                                           parseOptionsEntities, parseTags,
+                                           parseTagsOptions)
+import           Text.HTML.TagSoup.Entity (lookupEntity)
 
 import           Natas.Natas
+import           Natas.Parse
 
 solution :: Solution
 solution = do
   Just secret <- fmap (>>= decodeSecret) getSecret
+  let form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]
   opts <- loginOptions 8
-  req <-
-    postWith
-      opts
-      (parentUri 8)
-      ["secret" := secret, "submit" := ("Submit" :: C.ByteString)]
-  let body = (decodeUtf8 . C.toStrict) $ req ^. responseBody
-      match =
-        (filter ("natas9" `elem`) .
-         fmap T.words . catMaybes . fmap maybeTagText . parseTags)
-          body
-  pure $ listToMaybe match >>= (listToMaybe . reverse)
+  req <- postWith opts (parentUri 8) form
+  let body = reqBody req
+      match = workupBody 9 body
+  pure $ match >>= lastMay
 
 getSecret :: IO (Maybe String)
 getSecret = do
   req <- accessLevel' 8 (parentUri 8 ++ "/index-source.html") id
-  let body =
-        (T.unpack . T.replace "&nbsp;" " " . decodeUtf8 . C.toStrict) $
-        req ^. responseBody
+  let body = (T.unpack . T.replace "&nbsp;" " " . reqBody) req
       ipage =
         (parseTags .
          innerText . parseTagsOptions (parseOptionsEntities lookupEntity))
           body
       texts = (fmap words . catMaybes . fmap maybeTagText) ipage
-      targetTag = (listToMaybe . filter ("<?$encodedSecret" `elem`)) texts
+      targetTag =
+        (fmap (!! 2) . headMay . filter ("<?$encodedSecret" `elem`)) texts
       secret =
-        fmap
-          (takeWhile isAlphaNum . dropWhile (not . isAlphaNum) . (!! 2))
-          targetTag
+        fmap (takeWhile isAlphaNum . dropWhile (not . isAlphaNum)) targetTag
   pure secret
 
 decodeSecret :: String -> Maybe B.ByteString

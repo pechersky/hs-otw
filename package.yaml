@@ -42,6 +42,7 @@ library:
     - wreq
     - http-types
     - http-client
+    - safe
     - lens
     - transformers
     - tagsoup

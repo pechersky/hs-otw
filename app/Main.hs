@@ -5,7 +5,7 @@ import           Text.Read (readMaybe)
 import           Natas
 
 main :: IO ()
-main = do
+main =
   fmap readMaybe getLine >>= \case
     Nothing -> pure ()
     Just level -> do

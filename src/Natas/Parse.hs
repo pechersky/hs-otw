@@ -2,13 +2,18 @@ module Natas.Parse where
 
 import           Control.Lens
 import qualified Data.ByteString.Lazy.Char8 as C
-import           Data.Maybe                 (catMaybes, listToMaybe)
+import           Data.Maybe                 (catMaybes)
 import qualified Data.Text                  as T
 import           Data.Text.Encoding         (decodeUtf8)
-import           Network.Wreq
-import           Text.HTML.TagSoup
+import           Network.Wreq               (responseBody)
+import           Safe                       (headMay)
+import           Text.HTML.TagSoup          (Tag (TagComment), maybeTagText,
+                                             parseTags)
 
 import           Natas.Natas
+
+reqBody :: CResponse -> T.Text
+reqBody = decodeUtf8 . C.toStrict . view responseBody
 
 fromTagComment :: Tag a -> Maybe a
 fromTagComment =
@@ -16,11 +21,18 @@ fromTagComment =
     TagComment str -> Just str
     _ -> Nothing
 
-workupComments :: ([T.Text] -> Bool) -> CResponse -> Answer
-workupComments predicate req = last . T.words <$> targetTag
+workupComments' :: ([T.Text] -> Bool) -> CResponse -> Answer
+workupComments' predicate req = last . T.words <$> targetTag
   where
-    comments =
-      fmap (decodeUtf8 . C.toStrict) .
-      catMaybes . fmap fromTagComment . parseTags $
-      req ^. responseBody
-    targetTag = listToMaybe . filter (predicate . T.words) $ comments
+    comments = (catMaybes . fmap fromTagComment . parseTags . reqBody) req
+    targetTag = (headMay . filter (predicate . T.words)) comments
+
+workupComments :: Int -> CResponse -> Answer
+workupComments level = workupComments' (T.pack ("natas" ++ show level) `elem`)
+
+workupBody' :: ([T.Text] -> Bool) -> T.Text -> [[T.Text]]
+workupBody' predicate =
+  filter predicate . fmap T.words . catMaybes . fmap maybeTagText . parseTags
+
+workupBody :: Int -> T.Text -> Maybe [T.Text]
+workupBody level = headMay . workupBody' (T.pack ("natas" ++ show level) `elem`)
