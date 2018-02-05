@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Natas.Natas6 where
 
 import           Data.ByteString.Lazy (ByteString)

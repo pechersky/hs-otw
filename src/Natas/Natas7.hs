@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Natas.Natas7 where
 
 import           Control.Lens

@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Natas.Natas3 where
 
 import qualified Data.Text   as T

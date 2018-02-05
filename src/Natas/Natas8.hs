@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Natas.Natas8 where
 
 import qualified Data.ByteString          as B

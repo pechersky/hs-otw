@@ -26,12 +26,7 @@ library:
   source-dirs: src
   ghc-options: -Wall -fno-warn-unused-top-binds
   default-extensions:
-    - NumDecimals
-    - TypeApplications
-    - ViewPatterns
-    - TupleSections
     - LambdaCase
-    - OverloadedStrings
   dependencies:
     - template-haskell
     - containers
@@ -57,8 +52,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hs-otw
-    default-extensions:
-      - OverloadedStrings
 
 tests:
   hs-otw-test:
