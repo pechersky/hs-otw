@@ -1,7 +1,7 @@
 module Natas.Parse where
 
 import           Control.Lens
-import qualified Data.ByteString.Lazy.Char8 as C
+import           Data.ByteString.Lazy.Char8 (toStrict)
 import           Data.Maybe                 (catMaybes)
 import qualified Data.Text                  as T
 import           Data.Text.Encoding         (decodeUtf8)
@@ -13,7 +13,7 @@ import           Text.HTML.TagSoup          (Tag (TagComment), maybeTagText,
 import           Natas.Natas
 
 reqBody :: CResponse -> T.Text
-reqBody = decodeUtf8 . C.toStrict . view responseBody
+reqBody = decodeUtf8 . toStrict . view responseBody
 
 fromTagComment :: Tag a -> Maybe a
 fromTagComment =
