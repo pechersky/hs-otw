@@ -1,10 +1,12 @@
+{-# LANGUAGE RankNTypes #-}
+
 module Natas.Parse where
 
 import           Data.Maybe        (catMaybes)
 
 import           Data.Text         (Text)
 import qualified Data.Text         as T
-import           Safe              (headMay)
+import           Safe              (headMay, lastMay)
 
 import           Text.HTML.TagSoup (Tag (TagComment), maybeTagText, parseTags)
 
@@ -14,18 +16,20 @@ fromTagComment =
     TagComment str -> Just str
     _tag -> Nothing
 
-workupComments' :: ([Text] -> Bool) -> Text -> Maybe Text
-workupComments' predicate body = last . T.words <$> targetTag
-  where
-    comments = (catMaybes . fmap fromTagComment . parseTags) body
-    targetTag = (headMay . filter (predicate . T.words)) comments
+filterMatch :: Int -> [[Text]] -> [[Text]]
+filterMatch level = filter (T.pack ("natas" ++ show level) `elem`)
 
 workupComments :: Int -> Text -> Maybe Text
-workupComments level = workupComments' (T.pack ("natas" ++ show level) `elem`)
-
-workupBody' :: ([Text] -> Bool) -> Text -> [[Text]]
-workupBody' predicate =
-  filter predicate . fmap T.words . catMaybes . fmap maybeTagText . parseTags
+workupComments level body = comments >>= lastMay
+  where
+    comments = headMay (workupTags fromTagComment (filterMatch level) body)
 
 workupBody :: Int -> Text -> Maybe [Text]
-workupBody level = headMay . workupBody' (T.pack ("natas" ++ show level) `elem`)
+workupBody level = headMay . workupBody' (filterMatch level)
+
+workupBody' :: ([[Text]] -> a) -> Text -> a
+workupBody' = workupTags maybeTagText
+
+workupTags :: (forall str. Tag str -> Maybe str) -> ([[Text]] -> a) -> Text -> a
+workupTags tagReader converter =
+  converter . fmap T.words . catMaybes . fmap tagReader . parseTags
