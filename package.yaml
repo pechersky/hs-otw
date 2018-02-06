@@ -28,19 +28,19 @@ library:
   default-extensions:
     - LambdaCase
   dependencies:
-    - template-haskell
-    - containers
-    - text
     - base64-bytestring
     - bytestring
+    - containers
     - hexstring
-    - wreq
-    - http-types
     - http-client
-    - safe
+    - http-types
     - lens
-    - transformers
+    - safe
     - tagsoup
+    - template-haskell
+    - text
+    - transformers
+    - wreq
 
 executables:
   hs-otw-exe:
