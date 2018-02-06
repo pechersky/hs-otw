@@ -1,7 +1,6 @@
 module Natas.Natas4 where
 
-import           Data.String               (fromString)
-
+import           Data.ByteString.Char8     (pack)
 import           Safe                      (lastMay)
 
 import           Network.HTTP.Types.Header (hReferer)
@@ -14,7 +13,7 @@ import           Natas.Parse
 
 solution :: Solution
 solution = do
-  let referer = header hReferer .~ [fromString (parentUri 5 ++ "/")]
+  let referer = header hReferer .~ [pack (parentUri 5 ++ "/")]
   req <- accessLevel' 4 (parentUri 4) referer
   let body = reqBody req
       match = workupBody 5 body

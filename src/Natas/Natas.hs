@@ -1,12 +1,11 @@
 module Natas.Natas where
 
-import           Data.String          (fromString)
-
-import           Data.ByteString.Lazy (ByteString, toStrict)
-import           Data.Text            (Text)
-import qualified Data.Text            as T
-import           Data.Text.Encoding   (decodeUtf8, encodeUtf8)
-import qualified Data.Text.IO         as TIO
+import           Data.ByteString.Char8 (pack)
+import           Data.ByteString.Lazy  (ByteString, toStrict)
+import           Data.Text             (Text)
+import qualified Data.Text             as T
+import           Data.Text.Encoding    (decodeUtf8, encodeUtf8)
+import qualified Data.Text.IO          as TIO
 
 import           Network.Wreq
 
@@ -29,7 +28,7 @@ accessLevel' level uri modifyOptions = do
 loginOptions :: Int -> IO Options
 loginOptions level = do
   password <- encodeUtf8 <$> readPassword level
-  let username = fromString ("natas" ++ show level)
+  let username = pack ("natas" ++ show level)
   pure $ defaults & auth ?~ basicAuth username password
 
 readPassword :: Int -> IO Text

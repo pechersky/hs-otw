@@ -4,11 +4,11 @@ module Natas.Natas8 where
 
 import           Data.Char                (isAlphaNum)
 import           Data.Maybe               (catMaybes)
-import           Data.String              (fromString)
 
 import qualified Data.ByteString          as B
 import           Data.ByteString.Base64   (decode)
 import           Data.ByteString.Lazy     (ByteString)
+import           Data.ByteString.Char8    (pack)
 import qualified Data.Text                as T
 import           Safe                     (headMay, lastMay)
 
@@ -48,6 +48,6 @@ getSecret = do
   pure secret
 
 decodeSecret :: String -> Maybe B.ByteString
-decodeSecret = toMaybe . decode . B.reverse . toBytes . hexString . fromString
+decodeSecret = toMaybe . decode . B.reverse . toBytes . hexString . pack
   where
     toMaybe = either (const Nothing) pure
