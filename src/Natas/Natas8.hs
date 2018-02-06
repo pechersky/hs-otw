@@ -8,8 +8,9 @@ import           Data.Maybe               (catMaybes)
 import qualified Data.ByteString          as B
 import           Data.ByteString.Base64   (decode)
 import           Data.ByteString.Lazy     (ByteString)
-import           Data.ByteString.Char8    (pack)
+import           Data.Text                (Text)
 import qualified Data.Text                as T
+import           Data.Text.Encoding       (encodeUtf8)
 import           Safe                     (headMay, lastMay)
 
 import           Data.HexString           (hexString, toBytes)
@@ -32,7 +33,7 @@ solution = do
       match = workupBody 9 body
   pure $ match >>= lastMay
 
-getSecret :: IO (Maybe String)
+getSecret :: IO (Maybe Text)
 getSecret = do
   req <- accessLevel' 8 (parentUri 8 ++ "/index-source.html") id
   let body = (T.unpack . T.replace "&nbsp;" " " . reqBody) req
@@ -45,9 +46,9 @@ getSecret = do
         (fmap (!! 2) . headMay . filter ("<?$encodedSecret" `elem`)) texts
       secret =
         fmap (takeWhile isAlphaNum . dropWhile (not . isAlphaNum)) targetTag
-  pure secret
+  pure $ T.pack <$> secret
 
-decodeSecret :: String -> Maybe B.ByteString
-decodeSecret = toMaybe . decode . B.reverse . toBytes . hexString . pack
+decodeSecret :: Text -> Maybe B.ByteString
+decodeSecret = toMaybe . decode . B.reverse . toBytes . hexString . encodeUtf8
   where
     toMaybe = either (const Nothing) pure
