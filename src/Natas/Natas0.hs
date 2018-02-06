@@ -6,4 +6,4 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   req <- accessLevel 0
-  pure $ workupComments 1 req
+  pure $ workupComments 1 (reqBody req)

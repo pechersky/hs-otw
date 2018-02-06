@@ -6,7 +6,6 @@ import qualified Data.Text   as T
 import           Safe        (headMay, lastMay)
 
 import           Natas.Natas
-import           Natas.Parse
 
 solution :: Solution
 solution = do
