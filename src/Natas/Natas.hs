@@ -1,13 +1,16 @@
 module Natas.Natas where
 
-import           Control.Lens
-import           Data.ByteString.Lazy (ByteString, toStrict)
 import           Data.String          (fromString)
+
+import           Data.ByteString.Lazy (ByteString, toStrict)
 import           Data.Text            (Text)
 import qualified Data.Text            as T
 import           Data.Text.Encoding   (decodeUtf8, encodeUtf8)
 import qualified Data.Text.IO         as TIO
+
 import           Network.Wreq
+
+import           Control.Lens
 
 type Solution = IO (Maybe Text)
 

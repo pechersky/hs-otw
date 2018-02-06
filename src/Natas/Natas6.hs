@@ -2,11 +2,13 @@
 
 module Natas.Natas6 where
 
-import           Data.ByteString.Lazy (ByteString)
 import           Data.Char            (isAlpha, isSpace)
+
+import           Data.ByteString.Lazy (ByteString)
 import qualified Data.Text            as T
-import           Network.Wreq         (FormParam ((:=)), postWith)
 import           Safe                 (lastMay)
+
+import           Network.Wreq         (FormParam ((:=)), postWith)
 
 import           Natas.Natas
 import           Natas.Parse

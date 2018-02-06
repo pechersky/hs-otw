@@ -2,11 +2,13 @@
 
 module Natas.Natas7 where
 
-import           Control.Lens
 import qualified Data.Text         as T
-import           Network.Wreq      (param)
 import           Safe              (lastMay)
+
+import           Network.Wreq      (param)
 import           Text.HTML.TagSoup (innerText, parseTags)
+
+import           Control.Lens
 
 import           Natas.Natas
 import           Natas.Parse

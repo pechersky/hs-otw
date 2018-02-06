@@ -1,10 +1,13 @@
 module Natas.Natas4 where
 
-import           Control.Lens
 import           Data.String               (fromString)
+
+import           Safe                      (lastMay)
+
 import           Network.HTTP.Types.Header (hReferer)
 import           Network.Wreq              (header)
-import           Safe                      (lastMay)
+
+import           Control.Lens
 
 import           Natas.Natas
 import           Natas.Parse

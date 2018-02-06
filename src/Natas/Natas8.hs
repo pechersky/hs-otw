@@ -2,16 +2,18 @@
 
 module Natas.Natas8 where
 
+import           Data.Char                (isAlphaNum)
+import           Data.Maybe               (catMaybes)
+import           Data.String              (fromString)
+
 import qualified Data.ByteString          as B
 import           Data.ByteString.Base64   (decode)
 import           Data.ByteString.Lazy     (ByteString)
-import           Data.Char                (isAlphaNum)
-import           Data.HexString           (hexString, toBytes)
-import           Data.Maybe               (catMaybes)
-import           Data.String              (fromString)
 import qualified Data.Text                as T
-import           Network.Wreq             (FormParam ((:=)), postWith)
 import           Safe                     (headMay, lastMay)
+
+import           Data.HexString           (hexString, toBytes)
+import           Network.Wreq             (FormParam ((:=)), postWith)
 import           Text.HTML.TagSoup        (innerText, maybeTagText,
                                            parseOptionsEntities, parseTags,
                                            parseTagsOptions)

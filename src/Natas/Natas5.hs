@@ -2,11 +2,13 @@
 
 module Natas.Natas5 where
 
-import           Control.Lens
+import           Safe                         (lastMay)
+
 import           Network.HTTP.Client.Internal (createCookieJar)
 import           Network.Wreq                 (cookieValue, cookies,
                                                responseCookie)
-import           Safe                         (lastMay)
+
+import           Control.Lens
 
 import           Natas.Natas
 import           Natas.Parse

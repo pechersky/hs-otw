@@ -1,9 +1,11 @@
 module Natas.Parse where
 
 import           Data.Maybe        (catMaybes)
+
 import           Data.Text         (Text)
 import qualified Data.Text         as T
 import           Safe              (headMay)
+
 import           Text.HTML.TagSoup (Tag (TagComment), maybeTagText, parseTags)
 
 fromTagComment :: Tag a -> Maybe a
