@@ -28,6 +28,7 @@ library:
   default-extensions:
     - LambdaCase
   dependencies:
+    - aeson
     - base64-bytestring
     - bytestring
     - containers
@@ -35,6 +36,7 @@ library:
     - http-client
     - http-types
     - lens
+    - lens-aeson
     - safe
     - tagsoup
     - template-haskell
