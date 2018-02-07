@@ -15,7 +15,7 @@ import           Natas.Parse
 
 solution :: Solution
 solution = do
-  sreq <- accessLevel' 6 (parentUri 6 ++ "/includes/secret.inc") id
+  sreq <- getLevel' 6 (parentUri 6 ++ "/includes/secret.inc") id
   let sbody = reqBody sreq
       Just secret = (lastMay . T.words . T.filter validChar) sbody
       form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]

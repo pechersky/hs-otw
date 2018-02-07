@@ -16,12 +16,12 @@ type Solution = IO (Maybe Text)
 parentUri :: Int -> String
 parentUri level = "http://natas" ++ show level ++ ".natas.labs.overthewire.org"
 
-accessLevel :: Int -> IO (Response ByteString)
-accessLevel level = accessLevel' level (parentUri level) id
+getLevel :: Int -> IO (Response ByteString)
+getLevel level = getLevel' level (parentUri level) id
 
-accessLevel' ::
+getLevel' ::
      Int -> String -> (Options -> Options) -> IO (Response ByteString)
-accessLevel' level uri modifyOptions = do
+getLevel' level uri modifyOptions = do
   opts <- modifyOptions <$> loginOptions level
   getWith opts uri
 

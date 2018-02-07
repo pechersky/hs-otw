@@ -26,7 +26,7 @@ import           Natas.Parse
 
 solution :: Solution
 solution = do
-  req <- accessLevel 11
+  req <- getLevel 11
   let ckis = req ^.. responseCookie "data"
       Just secret = ckis ^? folded . cookieValue
       encKeyL =
@@ -43,7 +43,7 @@ solution = do
 
 getSecret :: IO (Maybe B.ByteString)
 getSecret = do
-  req <- accessLevel 11
+  req <- getLevel 11
   let secret = req ^.. responseCookie "data" . cookieValue
   pure $ headMay secret
 

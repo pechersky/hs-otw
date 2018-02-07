@@ -34,7 +34,7 @@ solution = do
 
 getSecret :: IO (Maybe Text)
 getSecret = do
-  req <- accessLevel' 8 (parentUri 8 ++ "/index-source.html") id
+  req <- getLevel' 8 (parentUri 8 ++ "/index-source.html") id
   let body = (T.unpack . T.replace "&nbsp;" " " . reqBody) req
       ipage =
         (parseTags .

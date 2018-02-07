@@ -9,7 +9,7 @@ import           Natas.Natas
 
 solution :: Solution
 solution = do
-  req <- accessLevel' 3 (parentUri 3 ++ "/s3cr3t/users.txt") id
+  req <- getLevel' 3 (parentUri 3 ++ "/s3cr3t/users.txt") id
   let body = reqBody req
       match =
         (headMay . filter ("natas4" `elem`) . fmap (T.splitOn ":") . T.lines)

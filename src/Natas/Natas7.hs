@@ -15,10 +15,10 @@ import           Natas.Parse
 
 solution :: Solution
 solution = do
-  sreq <- accessLevel 7
+  sreq <- getLevel 7
   let Just subpath = workupComments 8 (reqBody sreq)
       page = param "page" .~ [subpath]
-  req <- accessLevel' 7 (parentUri 7) page
+  req <- getLevel' 7 (parentUri 7) page
   let body = reqBody req
       match = (T.words . T.strip . innerText . parseTags) body
   pure $ lastMay match
