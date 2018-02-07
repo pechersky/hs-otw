@@ -2,22 +2,21 @@
 
 module Natas.Natas11 where
 
-import           Data.Bits                    (xor)
-import           Data.List                    (inits)
+import           Data.Bits              (xor)
+import           Data.List              (inits)
 
-import qualified Data.ByteString              as B
-import           Data.ByteString.Base64       (decodeLenient, encode)
-import           Data.ByteString.Lazy         (ByteString)
-import qualified Data.ByteString.Lazy         as LB
-import qualified Data.Text                    as T
-import           Data.Text.Encoding           (decodeUtf8, encodeUtf8)
-import           Safe                         (headMay, lastMay)
+import qualified Data.ByteString        as B
+import           Data.ByteString.Base64 (decodeLenient, encode)
+import           Data.ByteString.Lazy   (ByteString)
+import qualified Data.ByteString.Lazy   as LB
+import qualified Data.Text              as T
+import           Data.Text.Encoding     (decodeUtf8, encodeUtf8)
+import           Safe                   (headMay, lastMay)
 
-import           Data.Aeson                   (Value)
-import qualified Data.Aeson                   as A
-import           Network.HTTP.Client.Internal (createCookieJar)
-import           Network.Wreq                 (cookieValue, cookies, postWith,
-                                               responseCookie)
+import           Data.Aeson             (Value)
+import qualified Data.Aeson             as A
+import           Network.Wreq           (cookie, cookieValue, cookies, postWith,
+                                         responseCookie, responseCookieJar)
 
 import           Control.Lens
 import           Data.Aeson.Lens
@@ -36,9 +35,9 @@ solution = do
       Just encKey = generateKey encKeyL
       newpayload = payload & key "showpassword" .~ "yes"
       encSecret = encodeSecret encKey (A.encode newpayload)
-      ckiopt =
-        cookies .~ pure (createCookieJar (ckis <&> cookieValue .~ encSecret))
-  ckireq <- postWith (ckiopt opts) (parentUri 11) newpayload
+      modifyCookie = (cookie "data" . cookieValue) .~ encSecret
+      placeJar = cookies ?~ (req ^. responseCookieJar)
+  ckireq <- postWith ((modifyCookie . placeJar) opts) (parentUri 11) newpayload
   let body = reqBody ckireq
       match = workupBody 12 body
   pure $ match >>= lastMay

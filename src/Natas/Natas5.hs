@@ -2,11 +2,9 @@
 
 module Natas.Natas5 where
 
-import           Safe                         (lastMay)
+import           Safe         (lastMay)
 
-import           Network.HTTP.Client.Internal (createCookieJar)
-import           Network.Wreq                 (cookieValue, cookies,
-                                               responseCookie)
+import           Network.Wreq (cookie, cookieValue, cookies, responseCookieJar)
 
 import           Control.Lens
 
@@ -16,9 +14,9 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   req <- accessLevel 5
-  let ckis = req ^.. responseCookie "loggedin"
-      ckiopt = cookies .~ pure (createCookieJar (ckis <&> cookieValue .~ "1"))
-  ckireq <- accessLevel' 5 (parentUri 5) ckiopt
+  let modifyCookie = (cookie "loggedin" . cookieValue) .~ "1"
+      placeJar = cookies ?~ (req ^. responseCookieJar)
+  ckireq <- accessLevel' 5 (parentUri 5) (modifyCookie . placeJar)
   let body = reqBody ckireq
       match = workupBody 6 body
   pure $ match >>= lastMay
