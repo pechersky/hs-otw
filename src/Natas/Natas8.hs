@@ -14,7 +14,7 @@ import           Data.Text.Encoding       (encodeUtf8)
 import           Safe                     (headMay, lastMay)
 
 import           Data.HexString           (hexString, toBytes)
-import           Network.Wreq             (FormParam ((:=)), postWith)
+import           Network.Wreq             (FormParam ((:=)))
 import           Text.HTML.TagSoup        (innerText, maybeTagText,
                                            parseOptionsEntities, parseTags,
                                            parseTagsOptions)
@@ -27,8 +27,7 @@ solution :: Solution
 solution = do
   Just secret <- fmap (>>= decodeSecret) getSecret
   let form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]
-  opts <- loginOptions 8
-  req <- postWith opts (parentUri 8) form
+  req <- postLevel 8 form
   let body = reqBody req
       match = workupBody 9 body
   pure $ match >>= lastMay

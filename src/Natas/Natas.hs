@@ -1,12 +1,13 @@
 module Natas.Natas where
 
-import           Data.ByteString.Lazy  (ByteString, toStrict)
-import           Data.Text             (Text)
-import qualified Data.Text             as T
-import           Data.Text.Encoding    (decodeUtf8, encodeUtf8)
-import qualified Data.Text.IO          as TIO
+import           Data.ByteString.Lazy (ByteString, toStrict)
+import           Data.Text            (Text)
+import qualified Data.Text            as T
+import           Data.Text.Encoding   (decodeUtf8, encodeUtf8)
+import qualified Data.Text.IO         as TIO
 
 import           Network.Wreq
+import           Network.Wreq.Types   (Postable)
 
 import           Control.Lens
 
@@ -23,6 +24,20 @@ accessLevel' ::
 accessLevel' level uri modifyOptions = do
   opts <- modifyOptions <$> loginOptions level
   getWith opts uri
+
+postLevel :: (Postable a) => Int -> a -> IO (Response ByteString)
+postLevel level = postLevel' level (parentUri level) id
+
+postLevel' ::
+     (Postable a)
+  => Int
+  -> String
+  -> (Options -> Options)
+  -> a
+  -> IO (Response ByteString)
+postLevel' level uri modifyOptions form = do
+  opts <- modifyOptions <$> loginOptions level
+  postWith opts uri form
 
 loginOptions :: Int -> IO Options
 loginOptions level = do

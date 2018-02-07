@@ -15,7 +15,7 @@ import           Safe                   (headMay, lastMay)
 
 import           Data.Aeson             (Value)
 import qualified Data.Aeson             as A
-import           Network.Wreq           (cookie, cookieValue, cookies, postWith,
+import           Network.Wreq           (cookie, cookieValue, cookies,
                                          responseCookie, responseCookieJar)
 
 import           Control.Lens
@@ -26,7 +26,6 @@ import           Natas.Parse
 
 solution :: Solution
 solution = do
-  opts <- loginOptions 11
   req <- accessLevel 11
   let ckis = req ^.. responseCookie "data"
       Just secret = ckis ^? folded . cookieValue
@@ -37,7 +36,7 @@ solution = do
       encSecret = encodeSecret encKey (A.encode newpayload)
       modifyCookie = (cookie "data" . cookieValue) .~ encSecret
       placeJar = cookies ?~ (req ^. responseCookieJar)
-  ckireq <- postWith ((modifyCookie . placeJar) opts) (parentUri 11) newpayload
+  ckireq <- postLevel' 11 (parentUri 11) (modifyCookie . placeJar) newpayload
   let body = reqBody ckireq
       match = workupBody 12 body
   pure $ match >>= lastMay

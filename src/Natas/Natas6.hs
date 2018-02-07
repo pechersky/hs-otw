@@ -8,7 +8,7 @@ import           Data.ByteString.Lazy (ByteString)
 import qualified Data.Text            as T
 import           Safe                 (lastMay)
 
-import           Network.Wreq         (FormParam ((:=)), postWith)
+import           Network.Wreq         (FormParam ((:=)))
 
 import           Natas.Natas
 import           Natas.Parse
@@ -19,8 +19,7 @@ solution = do
   let sbody = reqBody sreq
       Just secret = (lastMay . T.words . T.filter validChar) sbody
       form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]
-  opts <- loginOptions 6
-  req <- postWith opts (parentUri 6) form
+  req <- postLevel 6 form
   let body = reqBody req
       match = workupBody 7 body
   pure $ match >>= lastMay
