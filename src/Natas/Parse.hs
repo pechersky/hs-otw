@@ -33,3 +33,6 @@ workupBody' = workupTags maybeTagText
 workupTags :: (forall str. Tag str -> Maybe str) -> ([[Text]] -> a) -> Text -> a
 workupTags tagReader converter =
   converter . fmap T.words . catMaybes . fmap tagReader . parseTags
+
+penultimateMay :: [a] -> Maybe a
+penultimateMay xs = fst <$> lastMay (zip xs (drop 1 xs))

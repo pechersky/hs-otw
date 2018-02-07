@@ -5,7 +5,7 @@ module Natas.Natas9 where
 import           Data.Maybe           (catMaybes)
 
 import           Data.ByteString.Lazy (ByteString)
-import           Safe                 (headMay, lastMay)
+import           Safe                 (headMay)
 
 import           Network.Wreq         (FormParam ((:=)), postWith)
 
@@ -21,6 +21,3 @@ solution = do
   let body = reqBody req
       match = catMaybes (workupBody' (fmap headMay) body)
   pure $ penultimateMay match
-
-penultimateMay :: [a] -> Maybe a
-penultimateMay xs = fst <$> lastMay (zip xs (drop 1 xs))
