@@ -42,7 +42,7 @@ attemptPassword guess = do
   pure $
     case breakOn "exists" body of
       (_match, "") -> False
-      _            -> True
+      _tupmatch    -> True
 
 placeAnywhere :: Char -> String
 placeAnywhere x = intersperse x "%%"
