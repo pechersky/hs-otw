@@ -27,6 +27,7 @@ import           Natas.Natas11             (solution)
 import           Natas.Natas12             (solution)
 import           Natas.Natas13             (solution)
 import           Natas.Natas14             (solution)
+import           Natas.Natas15             (solution)
 
 challenges :: M.Map Int Solution
 challenges = M.fromList $(getChallenges)

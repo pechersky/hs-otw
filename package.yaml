@@ -38,6 +38,7 @@ library:
     - http-types
     - lens
     - lens-aeson
+    - monad-loops
     - safe
     - tagsoup
     - template-haskell
