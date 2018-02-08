@@ -2,13 +2,12 @@
 
 module Natas.Natas6 where
 
-import           Data.Char            (isAlpha, isSpace)
+import           Data.Char    (isAlpha, isSpace)
 
-import           Data.ByteString.Lazy (ByteString)
-import qualified Data.Text            as T
-import           Safe                 (lastMay)
+import qualified Data.Text    as T
+import           Safe         (lastMay)
 
-import           Network.Wreq         (FormParam ((:=)))
+import           Network.Wreq (partBS, partText)
 
 import           Natas.Natas
 import           Natas.Parse
@@ -18,7 +17,7 @@ solution = do
   sreq <- getLevel' 6 (parentUri 6 ++ "/includes/secret.inc") id
   let sbody = reqBody sreq
       Just secret = (lastMay . T.words . T.filter validChar) sbody
-      form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]
+      form = [partText "secret" secret, partBS "submit" "Submit"]
   req <- postLevel 6 form
   let body = reqBody req
       match = workupBody 7 body

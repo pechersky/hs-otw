@@ -7,14 +7,13 @@ import           Data.Maybe               (catMaybes)
 
 import qualified Data.ByteString          as B
 import           Data.ByteString.Base64   (decode)
-import           Data.ByteString.Lazy     (ByteString)
 import           Data.Text                (Text)
 import qualified Data.Text                as T
 import           Data.Text.Encoding       (encodeUtf8)
 import           Safe                     (headMay, lastMay)
 
 import           Data.HexString           (hexString, toBytes)
-import           Network.Wreq             (FormParam ((:=)))
+import           Network.Wreq             (partBS)
 import           Text.HTML.TagSoup        (innerText, maybeTagText,
                                            parseOptionsEntities, parseTags,
                                            parseTagsOptions)
@@ -26,7 +25,7 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   Just secret <- fmap (>>= decodeSecret) getSecret
-  let form = ["secret" := secret, "submit" := ("Submit" :: ByteString)]
+  let form = [partBS "secret" secret, partBS "submit" "Submit"]
   req <- postLevel 8 form
   let body = reqBody req
       match = workupBody 9 body
