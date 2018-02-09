@@ -4,7 +4,6 @@ module Natas.Natas16 where
 
 import           Control.Monad       (filterM)
 
-import           Data.List           (intersperse)
 import           Data.Text           (breakOn, pack)
 
 import           Control.Monad.Loops (firstM)
