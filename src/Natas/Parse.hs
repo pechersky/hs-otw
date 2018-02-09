@@ -36,3 +36,10 @@ workupTags tagReader converter =
 
 penultimateMay :: [a] -> Maybe a
 penultimateMay xs = fst <$> lastMay (zip xs (drop 1 xs))
+
+firstMaybeM :: (Monad m) => (a -> m (Maybe b)) -> [a] -> m (Maybe b)
+firstMaybeM _ [] = pure Nothing
+firstMaybeM f (x:xs) =
+  f x >>= \case
+    Just result -> pure (Just result)
+    Nothing -> firstMaybeM f xs

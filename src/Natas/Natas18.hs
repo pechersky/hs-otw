@@ -35,10 +35,3 @@ attemptConnect placeJar value = do
 
 extractPassword :: [[Text]] -> [[Text]]
 extractPassword = filter (pack "Username:" `elem`)
-
-firstMaybeM :: (Monad m) => (a -> m (Maybe b)) -> [a] -> m (Maybe b)
-firstMaybeM _ [] = pure Nothing
-firstMaybeM f (x:xs) =
-  f x >>= \case
-    Just result -> pure (Just result)
-    Nothing -> firstMaybeM f xs
