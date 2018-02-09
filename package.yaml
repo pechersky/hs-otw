@@ -29,6 +29,7 @@ library:
     - LambdaCase
   dependencies:
     - aeson
+    - base16-bytestring
     - base64-bytestring
     - bytestring
     - containers
