@@ -43,6 +43,7 @@ library:
     - tagsoup
     - template-haskell
     - text
+    - time
     - transformers
     - wreq
 

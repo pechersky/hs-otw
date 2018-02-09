@@ -6,6 +6,8 @@ import           Control.Monad       (filterM)
 
 import           Data.List           (intersperse)
 import           Data.Text           (pack)
+import           Data.Time           (NominalDiffTime, diffUTCTime,
+                                      getCurrentTime)
 
 import           Control.Monad.Loops (firstM)
 
@@ -34,3 +36,13 @@ placeAnywhereSql x = intersperse x "%%"
 
 validChars :: String
 validChars = ['0' .. '9'] ++ ['A' .. 'Z'] ++ ['a' .. 'z']
+
+timeAction :: IO a -> IO (NominalDiffTime, a)
+timeAction action = do
+  before <- getCurrentTime
+  result <- action
+  after <- getCurrentTime
+  pure (diffUTCTime after before, result)
+
+timeAction_ :: IO a -> IO NominalDiffTime
+timeAction_ = fmap fst . timeAction
