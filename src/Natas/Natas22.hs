@@ -1,6 +1,6 @@
 module Natas.Natas22 where
 
-import           Control.Exception   (try, throwIO)
+import           Control.Exception   (catchJust)
 
 import           Data.Text           (Text)
 import           Data.Text.Encoding  (decodeUtf8)
@@ -18,14 +18,13 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   let req = getLevel' 22 (parentUri 22 ++ "/?revelio") (redirects .~ 0)
-  caughtBody <- handler (try (reqBody <$> req))
+  caughtBody <- catchJust isStatusCodeExceptionBody (reqBody <$> req) pure
   attemptParse caughtBody
 
-handler :: IO (Either HttpException Text) -> IO Text
-handler = (=<<) $ \case
- Right body -> pure body
- Left (HttpExceptionRequest _ (StatusCodeException _ bs)) -> pure (decodeUtf8 bs)
- Left err -> throwIO err
+isStatusCodeExceptionBody :: HttpException -> Maybe Text
+isStatusCodeExceptionBody (HttpExceptionRequest _ (StatusCodeException _ bs)) =
+  Just (decodeUtf8 bs)
+isStatusCodeExceptionBody _ = Nothing
 
 attemptParse :: Text -> IO (Maybe Text)
 attemptParse body =
