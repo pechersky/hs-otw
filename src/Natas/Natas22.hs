@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Natas.Natas22 where
 
 import           Control.Exception   (try, throwIO)
