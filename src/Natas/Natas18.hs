@@ -32,6 +32,3 @@ attemptConnect placeJar value = do
       match = headMay (workupBody' extractPassword body)
   print value
   pure $ match >>= lastMay
-
-extractPassword :: [[Text]] -> [[Text]]
-extractPassword = filter (pack "Username:" `elem`)

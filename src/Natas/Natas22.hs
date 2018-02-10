@@ -4,7 +4,7 @@ module Natas.Natas22 where
 
 import           Control.Exception   (try, throwIO)
 
-import           Data.Text           (Text, pack)
+import           Data.Text           (Text)
 import           Data.Text.Encoding  (decodeUtf8)
 import           Safe                (headMay, lastMay)
 
@@ -33,6 +33,3 @@ attemptParse :: Text -> IO (Maybe Text)
 attemptParse body =
   let match = headMay (workupBody' extractPassword body)
   in pure $ match >>= lastMay
-
-extractPassword :: [[Text]] -> [[Text]]
-extractPassword = filter (pack "Username:" `elem`)

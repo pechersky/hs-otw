@@ -43,3 +43,6 @@ firstMaybeM f (x:xs) =
   f x >>= \case
     Just result -> pure (Just result)
     Nothing -> firstMaybeM f xs
+
+extractPassword :: [[Text]] -> [[Text]]
+extractPassword = filter (T.pack "Username:" `elem`)

@@ -2,7 +2,7 @@
 
 module Natas.Natas20 where
 
-import           Data.Text    (Text, pack)
+import           Data.Text    (Text)
 import           Safe         (headMay, lastMay)
 
 import           Network.Wreq (Options, Part, cookies, partText,
@@ -28,6 +28,3 @@ attemptConnect placeJar = do
   let body = reqBody ckireq
       match = headMay (workupBody' extractPassword body)
   pure $ match >>= lastMay
-
-extractPassword :: [[Text]] -> [[Text]]
-extractPassword = filter (pack "Username:" `elem`)
