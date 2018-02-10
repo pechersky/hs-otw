@@ -16,9 +16,8 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   sreq <- getLevel 7
-  let Just subpath = workupComments 8 (reqBody sreq)
-      page = param "page" .~ [subpath]
-  req <- getLevel' 7 (parentUri 7) page
+  Just subpath <- pure $ workupComments 8 (reqBody sreq)
+  req <- getLevel' 7 (parentUri 7) (param "page" .~ [subpath])
   let body = reqBody req
       match = (T.words . T.strip . innerText . parseTags) body
   pure $ lastMay match

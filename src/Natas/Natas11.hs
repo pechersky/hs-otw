@@ -28,11 +28,11 @@ solution :: Solution
 solution = do
   req <- getLevel 11
   let ckis = req ^.. responseCookie "data"
-      Just secret = ckis ^? folded . cookieValue
-      encKeyL =
+  Just secret <- pure $ ckis ^? folded . cookieValue
+  let encKeyL =
         transcode (A.encode payload) (LB.fromStrict (decodeLenient secret))
-      Just encKey = generateKey encKeyL
-      newpayload = payload & key "showpassword" .~ "yes"
+  Just encKey <- pure $ generateKey encKeyL
+  let newpayload = payload & key "showpassword" .~ "yes"
       encSecret = encodeSecret encKey (A.encode newpayload)
       modifyCookie = (cookie "data" . cookieValue) .~ encSecret
       placeJar = cookies ?~ (req ^. responseCookieJar)
