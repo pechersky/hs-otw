@@ -45,6 +45,7 @@ library:
     - lens
     - lens-aeson
     - monad-loops
+    - process
     - safe
     - tagsoup
     - template-haskell
