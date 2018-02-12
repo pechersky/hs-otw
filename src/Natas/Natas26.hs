@@ -29,7 +29,7 @@ solution = do
 
 attemptConnect :: (Options -> Options) -> IO (Maybe Text)
 attemptConnect placeJar = do
-  ckireq <- getLevel' 26 (parentUri 26) placeJar
+  _ckireq <- getLevel' 26 (parentUri 26) placeJar
   req <- getLevel' 26 (parentUri 26 ++ "/img/injectoutput.php") placeJar
   attemptParse (reqBody req)
 
