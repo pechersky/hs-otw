@@ -13,7 +13,8 @@ import           Natas.Parse
 solution :: Solution
 solution = do
   let fakeUser = "natas28" ++ replicate 64 ' ' ++ "a"
-  _preq <- postLevel 27 [partText "username" (pack fakeUser), partText "password" ""]
+  _preq <-
+    postLevel 27 [partText "username" (pack fakeUser), partText "password" ""]
   req <- postLevel 27 [partText "username" "natas28", partText "password" ""]
   attemptParse (reqBody req)
 
