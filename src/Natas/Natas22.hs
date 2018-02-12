@@ -22,9 +22,9 @@ solution = do
   attemptParse caughtBody
 
 isStatusCodeExceptionBody :: HttpException -> Maybe Text
-isStatusCodeExceptionBody (HttpExceptionRequest _ (StatusCodeException _ bs)) =
+isStatusCodeExceptionBody (HttpExceptionRequest _req (StatusCodeException _resp bs)) =
   Just (decodeUtf8 bs)
-isStatusCodeExceptionBody _ = Nothing
+isStatusCodeExceptionBody _exception = Nothing
 
 attemptParse :: Text -> IO (Maybe Text)
 attemptParse body =
