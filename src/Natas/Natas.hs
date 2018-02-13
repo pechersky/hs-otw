@@ -68,9 +68,9 @@ isStatusCodeExceptionHandler converter (HttpExceptionRequest _req (StatusCodeExc
 isStatusCodeExceptionHandler _converter _exception = Nothing
 
 catchResponseHandler ::
-     (forall body. Response body -> a) -> IO a -> IO a
+     (forall body. Response body -> a) -> IO (Response b) -> IO a
 catchResponseHandler converter req =
-  catchJust (isStatusCodeExceptionHandler (const . converter)) req pure
+  catchJust (isStatusCodeExceptionHandler (const . converter)) (converter <$> req) pure
 
 catchResponseBodyHandler :: (B.ByteString -> a) -> IO a -> IO a
 catchResponseBodyHandler converter req =
